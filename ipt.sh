@@ -1,7 +1,10 @@
 IP=''
-IP2=''
-IP3=''
-SIP='99.33.59.0'
+#IP2=''
+#IP3=''
+#IP4=''
+#IP5=''
+#IP6=''
+SIP=''
 IPTABLES="iptables -v "
 IP6TABLES="ip6tables -v "
 $IPTABLES -F
@@ -27,12 +30,12 @@ $IPTABLES -N LUR
 $IPTABLES -N LIR
 $IPTABLES -N LIA
 
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 80 -j REDIRECT --to-port 2080
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 443 -j REDIRECT --to-port 2443
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 80 -j REDIRECT --to-port 3080
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 443 -j REDIRECT --to-port 3443
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 80 -j REDIRECT --to-port 4080
-$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 443 -j REDIRECT --to-port 4443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 80 -j REDIRECT --to-port 2080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 443 -j REDIRECT --to-port 2443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 80 -j REDIRECT --to-port 3080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 443 -j REDIRECT --to-port 3443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 80 -j REDIRECT --to-port 4080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 443 -j REDIRECT --to-port 4443
 
 $IPTABLES -A INPUT -m conntrack --ctstate INVALID -j LD
 $IPTABLES -A OUTPUT -m conntrack --ctstate INVALID -j LD
@@ -47,7 +50,7 @@ $IPTABLES -A INPUT -p tcp -d $IP --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --
 
 $IPTABLES -A TCP -p tcp -s $SIP/16 -d $IP --dport 22 -j LTA #ssh
 
-$IPTABLES -A TCP -p tcp -m multiport --dport 80,443,2080,2443,3080,3443,4080,4443,64738 -j LTA
+#$IPTABLES -A TCP -p tcp -m multiport --dport 80,443,2080,2443,3080,3443,4080,4443,64738 -j LTA
 #$IPTABLES -A TCP -p tcp -d $IP2 -m multiport --dport 80,443,3080,3443 -j LTA
 #$IPTABLES -A TCP -p tcp -d $IP3 -m multiport --dport 80,443,4080,4443 -j LTA
 #$IPTABLES -A TCP -p tcp -s $SIP/16 -m multiport --dport 80,8080 -j LTA
@@ -56,7 +59,7 @@ $IPTABLES -A TCP -p tcp -m multiport --dport 80,443,2080,2443,3080,3443,4080,444
 $IPTABLES -A TCP -j LD
 
 
-$IPTABLES -A UDP -p udp --dport 64738 -j LUA
+#$IPTABLES -A UDP -p udp --dport 64738 -j LUA
 $IPTABLES -A UDP -j LD
 
 
