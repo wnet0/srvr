@@ -1,12 +1,11 @@
-IP=''
-#IP2=''
-#IP3=''
-#IP4=''
-#IP5=''
-#IP6=''
+IPa=''
+#IPb=''
+#IPc=''
+#IPd=''
+#IPe=''
+#IPf=''
 SIP=''
 IPTABLES="iptables -v "
-IP6TABLES="ip6tables -v "
 $IPTABLES -F
 $IPTABLES -X
 $IPTABLES -t nat -F
@@ -30,12 +29,12 @@ $IPTABLES -N LUR
 $IPTABLES -N LIR
 $IPTABLES -N LIA
 
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 80 -j REDIRECT --to-port 2080
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP --dport 443 -j REDIRECT --to-port 2443
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 80 -j REDIRECT --to-port 3080
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP2 --dport 443 -j REDIRECT --to-port 3443
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 80 -j REDIRECT --to-port 4080
-#$IPTABLES -A PREROUTING -t nat -p tcp -d $IP3 --dport 443 -j REDIRECT --to-port 4443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPa --dport 80 -j REDIRECT --to-port 2080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPa --dport 443 -j REDIRECT --to-port 2443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPb --dport 80 -j REDIRECT --to-port 3080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPb --dport 443 -j REDIRECT --to-port 3443
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPc --dport 80 -j REDIRECT --to-port 4080
+#$IPTABLES -A PREROUTING -t nat -p tcp -d $IPc --dport 443 -j REDIRECT --to-port 4443
 
 $IPTABLES -A INPUT -m conntrack --ctstate INVALID -j LD
 $IPTABLES -A OUTPUT -m conntrack --ctstate INVALID -j LD
@@ -44,22 +43,27 @@ $IPTABLES -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 $IPTABLES -A INPUT -i lo -j ACCEPT
 $IPTABLES -A INPUT -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j LIA
 
-$IPTABLES -A INPUT -p udp -d $IP -m conntrack --ctstate NEW -j UDP
-$IPTABLES -A INPUT -p tcp -d $IP --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j TCP
+$IPTABLES -A INPUT -p udp -d $IPa -m conntrack --ctstate NEW -j UDP
+$IPTABLES -A INPUT -p tcp -d $IPa --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j TCP
 
 
-$IPTABLES -A TCP -p tcp -s $SIP/16 -d $IP --dport 22 -j LTA #ssh
+$IPTABLES -A TCP -p tcp -d $IPa --dport 22 -j LTA #ssh
 
-#$IPTABLES -A TCP -p tcp -m multiport --dport 80,443,2080,2443,3080,3443,4080,4443,64738 -j LTA
-#$IPTABLES -A TCP -p tcp -d $IP2 -m multiport --dport 80,443,3080,3443 -j LTA
-#$IPTABLES -A TCP -p tcp -d $IP3 -m multiport --dport 80,443,4080,4443 -j LTA
-#$IPTABLES -A TCP -p tcp -s $SIP/16 -m multiport --dport 80,8080 -j LTA
-#$IPTABLES -A TCP -p tcp -s $SIP/16 -m multiport --dport 443,8443 -j LTA
-#$IPTABLES -A TCP -p tcp --dport 64738 -j LTA #murmur
+#$IPTABLES -A TCP -p tcp --dport 80 -j LTA
+#$IPTABLES -A TCP -p tcp --dport 443 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPa --dport 2080 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPa --dport 2443 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPb --dport 3080 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPb --dport 3443 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPc --dport 4080 -j LTA
+#$IPTABLES -A TCP -p tcp -d $IPc --dport 4443 -j LTA
+
+#$IPTABLES -A TCP -p tcp -d $IPa --dport 64738 -j LTA #murmur
+
 $IPTABLES -A TCP -j LD
 
 
-#$IPTABLES -A UDP -p udp --dport 64738 -j LUA
+#$IPTABLES -A UDP -p udp -d $IP --dport 64738 -j LUA
 $IPTABLES -A UDP -j LD
 
 
@@ -85,6 +89,17 @@ $IPTABLES -A LUR -j REJECT #--reject-with icmp-port-unreachable
 
 $IPTABLES -A INPUT -j LD
 
+
+
+
+IP6a=''
+#IP6b=''
+#IP6c=''
+#IP6d=''
+#IP6e=''
+#IP6f=''
+SIP6=''
+IP6TABLES="ip6tables -v "
 
 $IP6TABLES -F
 $IP6TABLES -X
@@ -114,6 +129,8 @@ $IP6TABLES -A INPUT -p icmpv6 -m icmpv6 --icmpv6-type 8 -m conntrack --ctstate N
 
 $IP6TABLES -A INPUT -p udp -m conntrack --ctstate NEW -j UDP
 $IP6TABLES -A INPUT -p tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j TCP
+
+#$IPTABLES -A TCP -p tcp -d $IP6a --dport 22 -j LTA #ssh
 
 $IP6TABLES -A TCP -j LOG --log-prefix 'TCP6: '
 $IP6TABLES -A TCP -j DROP
