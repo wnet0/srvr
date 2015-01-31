@@ -58,8 +58,8 @@ $IPTABLES -A TCP -p tcp -m tcp --tcp-flags RST RST -j TCPACC #-m limit --limit 2
 $IPTABLES -A TCP -j LOG --log-prefix 'DROP TCP: '
 $IPTABLES -A TCP -j DROP
 
-#$IPTABLES -A TCPNEW -p tcp -d $IP1 --dport 22 -j TCPACC #ssh
-#$IPTABLES -A TCPNEW -p tcp -d $IP1 --dport 22622 -j TCPACC #ssh
+$IPTABLES -A TCPNEW -p tcp -d $IP1 --dport 22 -j TCPACC #ssh
+$IPTABLES -A TCPNEW -p tcp -d $IP1 --dport 22622 -j TCPACC #ssh
 $IPTABLES -A TCPNEW -j LOG --log-prefix 'DROP TCPNEW: '
 $IPTABLES -A TCPNEW -j DROP
 

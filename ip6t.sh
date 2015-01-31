@@ -1,10 +1,10 @@
-IP1=''
+#IP1=''
 #IP2=''
 #IP3=''
 #IP4=''
 #IP5=''
 #IP6=''
-SIP=''
+#SIP=''
 IP6TABLES="ip6tables -v "
 
 $IP6TABLES -F
@@ -37,7 +37,7 @@ $IP6TABLES -A OUTPUT -m conntrack --ctstate INVALID -j BADDRP
 
 $IP6TABLES -A INPUT -i lo -j ACCEPT
 $IP6TABLES -A INPUT -m conntrack --ctstate INVALID -j BADDRP
-$IP6TABLES -A INPUT -f -j BADDRP #IPV4 ONLY
+#$IP6TABLES -A INPUT -f -j BADDRP #IPV4 ONLY
 
 $IP6TABLES -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
@@ -72,9 +72,9 @@ $IP6TABLES -A TCPACC -j ACCEPT
 # This sample accepts them within a certain rate limit:
 $IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ICMACC #-m limit --limit 5/second
 # ICMPv6 types 134-136 are used in NDP
-$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 134 -j ICMACC
-$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 135 -j ICMACC
-$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 136 -j ICMACC
+$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 134 -j ACCEPT
+$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 135 -j ACCEPT
+$IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 136 -j ACCEPT
 # ICMPv6 types 1-4 are useful even if not in an ESTABLISHED or RELATED state.
 # These are accepted as defined in RFC4890 and pose no special security risk.
 $IP6TABLES -A ICM -p ipv6-icmp -m icmp6 --icmpv6-type 1 -j ICMACC
